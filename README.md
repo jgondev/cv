@@ -1,2 +1,3 @@
-# cv
-Just my personal CV in a website
+# CV
+
+Just my personal CV [in a website](https://jgondev.com)
