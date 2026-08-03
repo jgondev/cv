@@ -19,8 +19,35 @@ try {
   await page.emulateMediaType("screen");
   await page.evaluate(() => document.fonts.ready);
 
-  // The download button makes no sense inside the PDF itself
-  await page.addStyleTag({ content: ".pdf-download { display: none !important; }" });
+  // The download button and the scrollspy highlight make no sense inside the PDF
+  await page.addStyleTag({
+    content: `
+      .pdf-download { display: none !important; }
+      .navbar-inverse .navbar-nav > .active > a {
+        color: #8b8b8b !important;
+        border-bottom: none !important;
+      }
+    `,
+  });
+
+  // Retarget nav links to invisible anchors placed a bit above each section,
+  // so clicking them inside the PDF doesn't cut the section title
+  await page.evaluate((offset) => {
+    document.body.style.position = "relative";
+    document.querySelectorAll('#navbar a[href^="#"]').forEach((link) => {
+      const id = link.getAttribute("href").slice(1);
+      const target = document.getElementById(id);
+      if (!target || id === "top") return;
+      const anchor = document.createElement("span");
+      anchor.id = `${id}-pdf`;
+      anchor.style.cssText = `position:absolute;left:0;width:1px;height:1px;top:${Math.max(
+        0,
+        target.getBoundingClientRect().top + window.scrollY - offset
+      )}px`;
+      document.body.appendChild(anchor);
+      link.setAttribute("href", `#${id}-pdf`);
+    });
+  }, 100);
 
   const height = await page.evaluate(() => document.documentElement.scrollHeight);
   await page.pdf({
