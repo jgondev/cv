@@ -22,6 +22,26 @@
   <link color="#5bbad5" href="/safari-pinned-tab.svg" rel="mask-icon" />
   <meta name="msapplication-TileColor" content="#2b5797" />
   <meta name="theme-color" content="#ffffff" />
+  <!-- PDF export: single page sized to the full website -->
+  <style media="print">
+    @page {
+      size: 1440px 8250px;
+      margin: 0;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .navbar {
+      position: absolute;
+    }
+
+    .pdf-download {
+      display: none !important;
+    }
+  </style>
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -57,7 +77,10 @@
 
         <ul class="nav navbar-nav navbar-right quick-links">
           <li></li>
-          <li></li>
+          <li>
+            <a class="pdf-download" href="cv.pdf" download="JuanPabloGonzalez_CV.pdf"><i class="fa fa-download"></i>
+              Download PDF</a>
+          </li>
         </ul>
       </div>
       <!-- /.navbar-collapse -->
